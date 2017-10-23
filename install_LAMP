@@ -2,10 +2,14 @@ tail -f /var/log/syslog #monitorer
 apt-get update && apt-get -y upgrade && apt-get -y install nano proftpd git
 dpkg-reconfigure tzdata #selctionner europe=>paris
 dpkg-reconfigure locales #Sélectionner fr-FR.UTF-8 UTF-8
-apt-get update && apt-get upgrade && apt-get dist-upgrade -y
-apt-get install php7.0 php7.0-fpm
-apt-get install  libapache2-mod-php7.0
-apt-get install php7.0-gd php7.0-mysql php7.0-bz2 php7.0-json php7.0-curl php7.0-cli php7.0-common libapache2-mod-php7.0 php7.0 php7.0-fpm  php7.0-enchant php7.0-imap php7.0-intl php7.0-ldap php7.0-mcrypt php7.0-readline php7.0-pspell php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-json php7.0-sqlite3  php7.0-opcache php7.0-xml
-apt-get install php-xml php-mcrypt php-intl php-mbstring php-zip
-nano /etc/php/7.0/fpm/php.ini #Remplacer : cgi.fix_pathinfo=1 par cgi.fix_pathinfo=0
-nano /etc/php/7.0/fpm/pool.d/www.conf #Remplacer : listen = /run/php/php7.0-fpm.sock par listen = 127.0.0.1:9000
+reboot
+apt-get install php #HP 7.0.19-1 (cli) (built: May 11 2017 14:04:47) ( NTS )
+apt-get install php-fpm #
+apt-get install php-imap #apt-get install php-
+apt-get install php-mcrypt
+apt-get install openssl ssl-cert
+apt-get install mysql-server
+apt-get install apache2
+apt-get install postfixadmin
+apt-get install phpmyadmin
+
