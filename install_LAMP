@@ -12,4 +12,38 @@ apt-get install mysql-server
 apt-get install apache2
 apt-get install postfixadmin
 apt-get install phpmyadmin
+apt-get install postfix
+apt-get install postfix-mysql
+apt-get install libsasl2-modules
+apt-get install libsasl2-modules-sql
+groupadd -g 3000 vmail
+useradd -d /home/vmail -m -u 3000 -g 3000 vmail
+groups vmail # groups vmail
+/etc/postfix# nano main.cf # regerger la ligne mydestination
+ajouter ces lignes en bas du fichier main.cf
+####################################################################
+## -------
+virtual_uid_maps = static:3000
+virtual_gid_maps = static:3000
+virtual_mailbox_base = /home/vmail
+virtual_mailbox_domains = mysql:/etc/postfix/mysql_virtual_mailbox_domains.cf
+virtual_mailbox_maps = mysql:/etc/postfix/mysql_virtual_mailbox_maps.cf
+virtual_alias_maps = mysql:/etc/postfix/mysql_virtual_alias_maps.cf
+relay_domains = mysql:/etc/postfix/mysql_relay_domains.cf
+virtual_transport = lmtp:unix:private/dovecot-lmtp
+smtpd_recipient_restrictions =
+ permit_mynetworks,
+ permit_sasl_authenticated,
+ reject_non_fqdn_hostname,
+ reject_non_fqdn_sender,
+ reject_non_fqdn_recipient,
+ reject_unauth_destination,
+ reject_unauth_pipelining,
+ reject_invalid_hostname,
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+milter_default_action = accept
+smtpd_milters= unix:/milter-greylist/milter-greylist.sock, unix:/clamav/clamav-milter.ctl, unix:/spamass/spamass.sock
 
