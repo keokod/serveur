@@ -106,8 +106,3 @@ query = SELECT domain FROM domain WHERE domain='%s' and backupmx = 1
 
 adduser postfix sasl
 groups postfix # postfix : postfix sasl
-
-
-
-
-
