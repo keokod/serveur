@@ -106,3 +106,21 @@ query = SELECT domain FROM domain WHERE domain='%s' and backupmx = 1
 
 adduser postfix sasl
 groups postfix # postfix : postfix sasl
+
+
+#############################################
+editer ce fichier 
+/etc/postfix# nano main.cf
+
+#############################################
+
+apt-get install dovecot-imapd
+apt-get install dovecot-pop3d
+apt-get install dovecot-mysql
+apt-get install dovecot-lmtpd
+
+
+
+
+
+
