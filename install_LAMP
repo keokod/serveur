@@ -292,6 +292,7 @@ systemctl status dovecot -l
 #############################################
 pre Instalation postfix:
 CREATE DATABASE postfix ;
+ALTER DATABASE postfix COLLATE = 'latin1_swedish_ci' ;
 GRANT ALL PRIVILEGES ON postfix.* TO postfix@localhost IDENTIFIED BY 'root';
 
 nano /etc/postfixadmin# nano config.inc.php 
