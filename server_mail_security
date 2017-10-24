@@ -272,12 +272,34 @@ oct. 24 15:10:38 vps470685 spamd[16008]: spamd: server successfully spawned chil
 oct. 24 15:10:38 vps470685 spamd[16008]: prefork: child states: IS
 oct. 24 15:10:38 vps470685 spamd[16008]: prefork: child states: II
 
+########################""
+:/etc# sa-update
+#######################
+
+########################
+modiffier cette ligne nano /etc/default/postgrey 
+POSTGREY_OPTS="--unix=/var/spool/postfix/postgrey/socket --delay=60"
+
+########################
+root@vps470685:/etc/default# systemctl restart postgrey
+root@vps470685:/etc/default# systemctl status postgrey
+● postgrey.service - LSB: Start/stop the postgrey daemon
+   Loaded: loaded (/etc/init.d/postgrey; generated; vendor preset: enabled)
+   Active: active (exited) since Tue 2017-10-24 15:25:08 CEST; 16s ago
+     Docs: man:systemd-sysv-generator(8)
+  Process: 16280 ExecStop=/etc/init.d/postgrey stop (code=exited, status=0/SUCCESS)
+  Process: 16286 ExecStart=/etc/init.d/postgrey start (code=exited, status=0/SUCCESS)
+
+oct. 24 15:25:07 vps470685 systemd[1]: Stopped LSB: Start/stop the postgrey daemon.
+oct. 24 15:25:07 vps470685 systemd[1]: Starting LSB: Start/stop the postgrey daemon...
+oct. 24 15:25:08 vps470685 postgrey[16286]: Starting postfix greylisting daemon: postgrey.
+oct. 24 15:25:08 vps470685 systemd[1]: Started LSB: Start/stop the postgrey daemon.
+oct. 24 15:25:08 vps470685 postgrey[16294]: Process Backgrounded
+oct. 24 15:25:08 vps470685 postgrey[16294]: 2017/10/24-15:25:08 postgrey (type Net::Server::Multiplex
+) starting! pid(16294)
+oct. 24 15:25:08 vps470685 postgrey[16294]: Binding to UNIX socket file "/var/spool/postfix/postgrey/
+socket"
+
+########################
 
 
-
-
-
-
-
-
-  
