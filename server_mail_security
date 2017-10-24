@@ -29,6 +29,26 @@ Autorisations du fichier « socket » de clamav-milter : 660
 Faut-il supprimer la « socket » résiduelle après un arrêt brutal ? yes
 Délai d'expiration pour les données provenant de clamd : 120
  Faut-il interdire à clamav-milter de créer des processus fils (« fork ») ?  not
- │ Répertoire de l'environnement d'exécution sécurisé :   
- │ Fichier PID :       /var/run/clamav/clamav-milter.pid
-  Chemin des répertoires temporaires :  /tmp
+ Répertoire de l'environnement d'exécution sécurisé :   
+ Fichier PID :       /var/run/clamav/clamav-milter.pid
+ Chemin des répertoires temporaires :  /tmp
+ « Socket » de clamd à utiliser pour le traitement :   │ unix:/var/run/clamav/clamd.ctl
+ Hôtes à exclure de la vérification :    
+ Liste blanche d'adresses de courriel : 
+  │ Action à réaliser pour un courriel « infecté » :  reject
+  Action à réaliser en cas d'erreur :    differ
+  │ Motif de rejet des courriels infectés :  rejecter mauvais email cause %v
+  │ Faut-il ajouter des en-têtes aux courriels vérifiés ?  replace
+   │ Fichier de journal de clamav-milter :  /var/log/clamav/clamav-milter.log
+    │ Faut-il désactiver le verrouillage du fichier de journal ?  no
+    │ Taille maximale (en Mo) du fichier de journal :    100M
+    │ Faut-il ajouter des informations temporelles dans le fichier de journal pour chaque courriel ? yes
+    │ Faut-il utiliser le système de journalisation syslog ?no
+     Type des messages syslog :  LOG_LOCAL6
+         │ Faut-il activer la journalisation bavarde ? no
+         │ Niveau d'information à journaliser pour les messages infectés :  off
+          │ Taille maximale (en Mo) des fichiers à vérifier : 25
+          Voulez-vous que clamav-milter gère plusieurs destinataires ?  no
+           Souhaitez-vous activer la rotation des journaux ? yes
+     
+  
