@@ -246,6 +246,31 @@ endif # Mail::SpamAssassin::Plugin::Shortcircuit
  systemctl restart spamassassin
 
 
+:/etc# systemctl status spamassassin
+● spamassassin.service - Perl-based spam filter using text analysis
+   Loaded: loaded (/lib/systemd/system/spamassassin.service; disabled; vendor preset: enabled)
+   Active: active (running) since Tue 2017-10-24 15:10:38 CEST; 3s ago
+  Process: 16005 ExecStart=/usr/sbin/spamd -d --pidfile=/var/run/spamassassin.pid $OPTIONS (code=exited, stat
+us=0/SUCCESS)
+ Main PID: 16008 (/usr/sbin/spamd)
+    Tasks: 3 (limit: 4915)
+   CGroup: /system.slice/spamassassin.service
+           ├─16008 /usr/sbin/spamd -d --pidfile=/var/run/spamassassin.pid --create-prefs --max-children 5 --h
+elper-home-dir=/var/log/spamassassin -u debian-spamd -g debian-spamd #### !!! modifier ci nécessaire debian-spamd
+           ├─16009 spamd child
+           └─16010 spamd child
+
+oct. 24 15:10:36 vps470685 systemd[1]: Stopped Perl-based spam filter using text analysis.
+oct. 24 15:10:36 vps470685 systemd[1]: Starting Perl-based spam filter using text analysis...
+oct. 24 15:10:37 vps470685 spamd[16005]: logger: removing stderr method
+oct. 24 15:10:38 vps470685 spamd[16008]: spamd: server started on IO::Socket::IP [::1]:783, IO::Socket::IP [1
+27.0.0.1]:783 (running version 3.4.1)
+oct. 24 15:10:38 vps470685 spamd[16008]: spamd: server pid: 16008
+oct. 24 15:10:38 vps470685 spamd[16008]: spamd: server successfully spawned child process, pid 16009
+oct. 24 15:10:38 vps470685 systemd[1]: Started Perl-based spam filter using text analysis.
+oct. 24 15:10:38 vps470685 spamd[16008]: spamd: server successfully spawned child process, pid 16010
+oct. 24 15:10:38 vps470685 spamd[16008]: prefork: child states: IS
+oct. 24 15:10:38 vps470685 spamd[16008]: prefork: child states: II
 
 
 
