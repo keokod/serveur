@@ -246,5 +246,54 @@ modifier ce fichier
 #############################################
 
 mail_max_userip_connections = 10 # decommanter cette ligne
+#############################################
+modifier ce fichier 
+/etc/dovecot/conf.d# nano auth-sql.conf.ext 
+#############################################
+passdb {
+  driver = sql
+
+  # Path for SQL configuration file, see example-config/dovecot-sql.conf.ext
+  args = /etc/dovecot/dovecot-mysql.conf.ext
+}
+
+userdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-mysql.conf.ext #rajouter my dans sql.conf dans passdb et userdb
+}
+
+
+
+#############################################
+modifier ce fichier 
+/etc/dovecot/conf.d# nano 10-master.conf 
+
+#############################################
+service lmtp {
+  unix_listener /var/spool/postfix/private/dovecot-lmtp {
+    mode = 0666
+    user = postfix
+    group = postfix
+  }
+
+  # Postfix smtp-auth
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+  }
+#############################################
+
+systemctl restart dovecot
+systemctl restart postfix
+systemctl status dovecot #doit marquer active(running)
+
+systemctl status dovecot -l
+systemctl status postfix -l
+
+/etc/apache2/conf-enabled# nano postfixadmin.conf 
+
+
+
+
+
 
 
