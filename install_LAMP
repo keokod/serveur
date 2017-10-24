@@ -199,8 +199,52 @@ apt-get install dovecot-pop3d
 apt-get install dovecot-mysql
 apt-get install dovecot-lmtpd
 
+#############################################
+editer ce fichier 
+/etc/dovecot# nano dovecot-mysql.conf.ext
+#############################################
+
+driver = mariadb
+connect = host=127.0.0.1 dbname=postfix user=postfix password=root
+default_pass_scheme =MD5-CRYPT
+user_query = SELECT '/home/vmail/%d/%n' AS home, 3000 AS uid, 3000 AS gid FROM mailbox WHERE username ='%u'
+password_query = SELECT password FROM mailbox WHERE username ='%u'
+
+#############################################
+modifier ce fichier 
+/etc/dovecot/conf.d# nano 10-auth.conf
+#############################################
+
+#disable_plaintext_auth = yes
+disable_plaintext_auth = no # decommenter et mettre à no
+
+#auth_mechanisms = plain
+auth_mechanisms = plain login # ajouter login
+
+#!include auth-system.conf.ext  #commenter
+!include auth-sql.conf.ext # decommanter
+
+#############################################
+modifier ce fichier 
+/etc/dovecot/conf.d# nano 10-mail.conf
+#############################################
 
 
+#mail_location = mbox:~/mail:INBOX=/var/mail/%u
+mail_location = maildir:/home/vmail/%d/%n:INDEX=/home/vmail/%d/%n/indexes
 
+#############################################
+modifier ce fichier 
+/etc/dovecot/conf.d# nano 10-ssl.conf
+#############################################
+mettre ssl = yes
+
+
+#############################################
+modifier ce fichier 
+/etc/dovecot/conf.d# nano 20-imap.conf 
+#############################################
+
+mail_max_userip_connections = 10 # decommanter cette ligne
 
 
