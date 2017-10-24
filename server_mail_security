@@ -42,7 +42,7 @@ Délai d'expiration pour les données provenant de clamd : 120
    │ Fichier de journal de clamav-milter :  /var/log/clamav/clamav-milter.log
     │ Faut-il désactiver le verrouillage du fichier de journal ?  no
     │ Taille maximale (en Mo) du fichier de journal :    100M
-    │ Faut-il ajouter des informations temporelles dans le fichier de journal pour chaque courriel ? yes
+    │ Faut-il ajouter des infosystemctl restart postfix.servicermations temporelles dans le fichier de journal pour chaque courriel ? yes
     │ Faut-il utiliser le système de journalisation syslog ?no
      Type des messages syslog :  LOG_LOCAL6
          │ Faut-il activer la journalisation bavarde ? no
@@ -50,5 +50,196 @@ Délai d'expiration pour les données provenant de clamd : 120
           │ Taille maximale (en Mo) des fichiers à vérifier : 25
           Voulez-vous que clamav-milter gère plusieurs destinataires ?  no
            Souhaitez-vous activer la rotation des journaux ? yes
-     
+ ##########################################"
+ 
+ systemctl restart postfix.service
+
+ ##########################################"
+ modifier ce fichier
+:/etc/default# nano spamass-milter 
+ ##########################################"
+
+
+# spamass-milt startup defaults
+
+# OPTIONS are passed directly to spamass-milter.
+# man spamass-milter for details
+
+# Non-standard configuration notes:
+# See README.Debian if you use the -x option with sendmail
+# You should not pass the -d option in OPTIONS; use SOCKET for that.
+
+# Default, use the spamass-milter user as the default user, ignore
+# messages from localhost
+OPTIONS="-u spamass-milter -i 127.0.0.1"
+
+# Reject emails with spamassassin scores > 15.
+#OPTIONS="${OPTIONS} -r 1"
+
+# Do not modify Subject:, Content-Type: or body.
+#OPTIONS="${OPTIONS} -m"
+
+######################################
+# If /usr/sbin/postfix is executable, the following are set by
+# default. You can override them by uncommenting and changing them
+# here.
+######################################
+ SOCKET="/var/spool/postfix/spamass/spamass.sock"
+ SOCKETOWNER="spamass-milter:postfix"
+ SOCKETMODE="0660"
+#####################################
+/var/spool/postfix# systemctl restart spamass-milter
+/var/spool/postfix# systemctl status spamass-milter
+
+apt-get install spamc spamassassin
+
+
+######################### 
+modifier ce fichier /etc/default# nano spamassassin 
+#########################""
+# /etc/default/spamassassin
+# Duncan Findlay
+
+# WARNING: please read README.spamd before using.
+# There may be security risks.
+
+# If you're using systemd (default for jessie), the ENABLED setting is
+# not used. Instead, enable spamd by issuing:
+# systemctl enable spamassassin.service
+# Change to "1" to enable spamd on systems using sysvinit:
+ENABLED=1
+
+# Options
+# See man spamd for possible options. The -d option is automatically added.
+
+# SpamAssassin uses a preforking model, so be careful! You need to
+# make sure --max-children is not set to anything higher than 5,
+# unless you know what you're doing.
+
+OPTIONS="--create-prefs --max-children 5 --helper-home-dir=/var/lig/spamassassin -u spamd -g spamd"
+
+# Pid file
+# Where should spamd write its PID to file? If you use the -u or
+# --username option above, this needs to be writable by that user.
+# Otherwise, the init script will not be able to shut spamd down.
+PIDFILE="/var/run/spamd.pid"
+
+# Set nice level of spamd
+#NICE="--nicelevel 15"
+
+# Cronjob
+# Set to anything but 0 to enable the cron job to automatically update
+# spamassassin's rules on a nightly basis
+CRON=1
+###############################################""
+
+/var/spool/postfix# usermod -aG clamav postfix
+/var/spool/postfix# groups postfix
+postfix : postfix sasl clamav
+
+#####################"
+modifier ce fichier ::/etc/spamassassin# nano local.cf
+########################
+
+# This is the right place to customize your installation of SpamAssassin.
+#
+# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+# tweaked.
+#
+# Only a small subset of options are listed below
+#
+###########################################################################
+
+#   Add *****SPAM***** to the Subject header of spam e-mails
+#
+rewrite_header Subject *****SPAM*****
+
+
+#   Save spam messages as a message/rfc822 MIME attachment instead of
+#   modifying the original message (0: off, 2: use text/plain instead)
+#
+# report_safe 1
+
+
+#   Set which networks or hosts are considered 'trusted' by your mail
+#   server (i.e. not spammers)
+#
+# trusted_networks 212.17.35.
+
+
+#   Set file-locking method (flock is not safe over NFS, but is faster)
+#
+# lock_method flock
+
+
+#   Set the threshold at which a message is considered spam (default: 5.0)
+#
+required_score 5.0
+
+
+#   Use Bayesian classifier (default: 1)
+#
+ use_bayes 1
+
+#   Bayesian classifier auto-learning (default: 1)
+#
+ bayes_auto_learn 1
+
+
+#   Set headers which may provide inappropriate cues to the Bayesian
+#   classifier
+#
+# bayes_ignore_header X-Bogosity
+# bayes_ignore_header X-Spam-Flag
+# bayes_ignore_header X-Spam-Status
+
+
+#   Whether to decode non- UTF-8 and non-ASCII textual parts and recode
+#   them to UTF-8 before the text is given over to rules processing.
+#
+# normalize_charset 1
+
+#   Some shortcircuiting, if the plugin is enabled
+#
+ifplugin Mail::SpamAssassin::Plugin::Shortcircuit
+#
+#   default: strongly-whitelisted mails are *really* whitelisted now, if the
+#   shortcircuiting plugin is active, causing early exit to save CPU load.
+#   Uncomment to turn this on
+# 
+# shortcircuit USER_IN_WHITELIST       on
+# shortcircuit USER_IN_DEF_WHITELIST   on
+# shortcircuit USER_IN_ALL_SPAM_TO     on
+# shortcircuit SUBJECT_IN_WHITELIST    on
+
+#   the opposite; blacklisted mails can also save CPU
+#
+# shortcircuit USER_IN_BLACKLIST       on
+# shortcircuit USER_IN_BLACKLIST_TO    on
+# shortcircuit SUBJECT_IN_BLACKLIST    on
+
+
+#   if you have taken the time to correctly specify your "trusted_networks",
+#   this is another good way to save CPU
+#
+# shortcircuit ALL_TRUSTED             on
+
+#   and a well-trained bayes DB can save running rules, too
+#
+# shortcircuit BAYES_99                spam
+# shortcircuit BAYES_00                ham
+
+endif # Mail::SpamAssassin::Plugin::Shortcircuit
+
+
+
+
+
+
+
+
+
+
+
+
   
