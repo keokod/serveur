@@ -3,3 +3,32 @@ apt-get install clamav-unofficial-sigs
 apt-get install postgrey
 apt-get install spamass-milter
 
+systemctl status clamav-freshclam.service
+
+###################################"
+
+editer ce fichier  :/etc/default# nano clamav-milter
+
+SOCKET_RWGROUP=postfix # juste cette ligne à ajouter
+
+#################################"
+:/etc/default# cd /var/spool/postfix/
+:/var/spool/postfix# mkdir clamav
+:/var/spool/postfix# chown clamav clamav/
+
+
+/var/spool/postfix# dpkg-reconfigure clamav-milter
+######################################################
+Faut-il gérer le fichier de configuration automatiquement ?  yes
+ Identifiant qui exécutera clamav-milter :   clamav
+ Groupes de clamav-milter (séparés par des espaces) :    
+  Interface de communication avec Sendmail :   
+var/spool/postfix/clamav/clamav-milter.ctl
+Groupe propriétaire du fichier « socket » de clamav-milter : clamav
+Autorisations du fichier « socket » de clamav-milter : 660
+Faut-il supprimer la « socket » résiduelle après un arrêt brutal ? yes
+Délai d'expiration pour les données provenant de clamd : 120
+ Faut-il interdire à clamav-milter de créer des processus fils (« fork ») ?  not
+ │ Répertoire de l'environnement d'exécution sécurisé :   
+ │ Fichier PID :       /var/run/clamav/clamav-milter.pid
+  Chemin des répertoires temporaires :  /tmp
