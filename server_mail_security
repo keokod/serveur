@@ -230,7 +230,20 @@ ifplugin Mail::SpamAssassin::Plugin::Shortcircuit
 # shortcircuit BAYES_00                ham
 
 endif # Mail::SpamAssassin::Plugin::Shortcircuit
+#################################
 
+/etc/spamassassin# nano spamc.conf
+
+
+##############################""
+-U /var/spool/postfix/spamass/spamass.sock 
+-u spamass-milter
+
+-s 350000
+
+##########################"
+
+ systemctl restart spamassassin
 
 
 
