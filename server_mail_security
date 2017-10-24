@@ -1,0 +1,3 @@
+apt-get install clamav-milter
+apt-get install clamav-unofficial-sigs
+apt-get install postgrey
