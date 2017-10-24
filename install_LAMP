@@ -287,9 +287,24 @@ systemctl restart postfix
 systemctl status dovecot #doit marquer active(running)
 
 systemctl status dovecot -l
-systemctl status postfix -l
 
-/etc/apache2/conf-enabled# nano postfixadmin.conf 
+
+#############################################
+pre Instalation postfix:
+CREATE DATABASE postfix ;
+GRANT ALL PRIVILEGES ON postfix.* TO postfix@localhost IDENTIFIED BY 'root';
+
+nano /etc/postfixadmin# nano config.inc.php 
+$CONF['database_type'] = 'mysqli';
+$CONF['database_host'] ='localhost';
+$CONF['database_user'] = 'postfix';
+$CONF['database_password'] = 'root';
+$CONF['database_name'] = 'postfix';
+
+aller à cette adresse:
+https://ohkod.fr/postfixadmin/setup.php
+
+
 
 
 
