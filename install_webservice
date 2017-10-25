@@ -57,3 +57,25 @@ Avec le navigateur ouvire cette url localhost:8000
 
 vous devirez avoir la page de test
 
+>> Creation d'une table pour y insérer des prix
+CREATE TABLE tarif ( id INT NOT NULL AUTO_INCREMENT,  produit CHAR(30) NOT NULL,prix DECIMAL(5,2) unsigned , PRIMARY KEY (id) );
+
+>> inséron un prix:
+insert into tarif(produit,prix) VALUES('pizza',10);
+
+>> lecture de ce tuple:
+SELECT * FROM tarif;
+
+ce qui donne:
++---------+-----------------------+------+-----+---------+----------------+
+| Field   | Type                  | Null | Key | Default | Extra          |
++---------+-----------------------+------+-----+---------+----------------+
+| id      | int(11)               | NO   | PRI | NULL    | auto_increment |
+| produit | char(30)              | NO   |     | NULL    |                |
+| prix    | decimal(5,2) unsigned | YES  |     | NULL    |                |
++---------+-----------------------+------+-----+---------+----------------+
+
+
+>> Dans lumen ecrivons un modèle pour lire ce prix:
+
+
