@@ -4,7 +4,8 @@ composer create-project --prefer-dist laravel/lumen blog
 
 #test d'une page :
 
->> créer une route http://localhost:8000/test
+>> créer une route /www/routes/web.php
+
 
 <?php
 
@@ -23,15 +24,17 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/test','ExampleController@test');
+$router->get('/tarif','TarifController@getPrix');
 
->> créer une méthode test() qui appelle cette route:
+
+
+>> créer le controller /www/app/Http/Controllers/TarifController.php
 
 <?php
+namespace App\Http\Controllers; //pourquoi les namespaces on une majuscule et que le dossier sont en minuscule
+use Illuminate\Http\Request;
 
-namespace App\Http\Controllers;
-
-class ExampleController extends Controller
+class TarifController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -40,22 +43,18 @@ class ExampleController extends Controller
      */
     public function __construct()
     {
-
+        header("Access-Control-Allow-Origin: *");
+    }
+    
+    public function getPrix() 
+    {
+        $sql="select * from tarif";
+        $results = app('db')->select($sql);
+        return json_encode($results);
     }
 
-        public function test(){
-                return "je suis un exemple";
-        }
-    //
 }
 
->> démarrer le serveur lumen avec la commande:
-
-php -S localhost:8000 -t public
-
-Avec le navigateur ouvire cette url localhost:8000
-
-vous devirez avoir la page de test
 
 >> Creation d'une table pour y insérer des prix
 CREATE TABLE tarif ( id INT NOT NULL AUTO_INCREMENT,  produit CHAR(30) NOT NULL,prix DECIMAL(5,2) unsigned , PRIMARY KEY (id) );
@@ -75,7 +74,18 @@ ce qui donne:
 | prix    | decimal(5,2) unsigned | YES  |     | NULL    |                |
 +---------+-----------------------+------+-----+---------+----------------+
 
+>> démarrer le serveur lumen avec la commande:
 
->> Dans lumen ecrivons un modèle pour lire ce prix:
+php -S localhost:8000 -t public
+
+Avec le navigateur ouvire cette url localhost:8000
+
+vous devirez avoir le résultat de la requête à cette adresse http://localhost:8000/tarif:
+
+[{"id":1,"produit":"pizza","prix":"10.00"}]
+
+
+
+
 
 
