@@ -1,0 +1,3 @@
+apt-get install composer
+composer global require "laravel/lumen-installer"
+composer create-project --prefer-dist laravel/lumen blog
